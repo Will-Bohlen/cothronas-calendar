@@ -5,9 +5,9 @@ If this goes well, I might try to make this more modular so that it can work for
 
 ## Planned features
 - Visual calendar display (done!)
-- Sunrise/sunset times for both suns
-- Moonrise/moonset and lunar phases (which is weird because two suns)
-- Sun/moon visualization
+- Sunrise/sunset times for both suns (done!)
+- Moonrise/moonset and lunar phases (done!)
+- Sun/moon visualization (moon visualization complete, might add suns later)
 - Weather
 - Calendar events
 - Player permissions
