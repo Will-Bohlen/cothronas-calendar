@@ -17,10 +17,39 @@
                 {{/each}}
             </div>
 
-            <div class="days">
+            <div id="days" class="days">
                 {{#each daysInMonth}}
                     {{{this}}}
                 {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="weather">
+        <div class="bodies">
+            <h2>Salos</h2>
+            <div class="salos">
+                <p>Rise: {{riseSetTimes.salosRise}}</p>
+                <p>Set: {{riseSetTimes.salosSet}}</p>
+            </div>
+            <h2>Vol</h2>
+            <div class="vol">
+                <p>Rise: {{riseSetTimes.volRise}}</p>
+                <p>Set: {{riseSetTimes.volSet}}</p>
+            </div>
+            <h2>Ghea</h2>
+            <div class="ghea">
+                <div class="moon">
+                    <div id="sal-disk">
+                        <div id="sal-mask"></div>
+                    </div>
+                    <div id="vol-disk">
+                        <div id="vol-mask"></div>
+                    </div>
+                </div>
+                <div class="ghea-text">
+                    <p>Rise: {{riseSetTimes.gheaRise}}</p>
+                    <p>Set: {{riseSetTimes.gheaSet}}</p>
+                </div>
             </div>
         </div>
     </div>

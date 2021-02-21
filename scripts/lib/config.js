@@ -7,7 +7,7 @@ const weekdays = ["Saldin", "Voldin", "Uskdin", "Aesdin", "Domdin", "Ghedin", "H
 const days_per_year = 365;
 const months = { Naeril: 32, Golus: 32, Abhainn: 19, Ektuery: 32, 
     Itmer: 32, Durlim: 32, Unsetting: 7, Vyr: 32, Nera: 32, 
-    Aestary: 32, Tur: 19, Vuria: 32, Nardant: 32 };
+    Aestary: 32, Tùr: 19, Vuria: 32, Nardant: 32 };
 
 const month_names = Object.keys(months);
 const month_lengths = Object.values(months);

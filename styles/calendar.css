@@ -9,101 +9,204 @@
   
   .cothronas-calendar-container {
     width: 100%;
-    height: 60vh;
+    height: 100%;
     background-color: #12121f;
     color: #eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .calendar {
-    width: 100%;
-    height: 100%;
-    background-color: #222227;
-  }
-  
-  .month {
-    width: 100%;
-    height: 15%;
-    background-color: #a83f3f;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 2rem;
-    text-align: center;
-  }
-  
-  .month i {
-    font-size: 2.5rem;
-    cursor: pointer;
-  }
-  
-  .month h3 {
-    font-size: 3rem;
-    font-weight: 400;
-    letter-spacing: 0.2rem;
-    margin-top: 1rem;
-  }
-  
-  .dates {
-    justify-content: center;
-    align-items: center;
-    height: 60%;
-  }
-  
-  .weekdays {
-    width: 100%;
-    height: 10%;
-    padding: 0 0.4rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .weekdays div {
-    font-size: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 0.1rem;
-    width: calc(100% / 7 + 0.2rem);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .days {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 0.4rem;
-  }
-  
-  .days div {
-    font-size: 1.4rem;
-    margin: -0.1rem;
-    width: calc(100% / 7 + 0.2rem);
-    height: 6rem;
-    display: flex;
-    justify-content: left;
+    display: grid;
+    grid-template-rows: 44rem;
     align-items: top;
-    padding: 0.4rem;
-    transition: background-color 0.15s;
-    border: 0.2rem solid #777;
   }
   
-  .days div:hover:not(.today):not(.otherMonth) {
-    background-color: #61211f;
-    cursor: pointer;
-  }
+    .calendar {
+        width: 100%;
+        height: 44rem;
+        padding-bottom: 0.4rem;
+        background-color: #222227;
+    }
+    
+        .month {
+            width: 100%;
+            height: 6rem;
+            background-color: #a83f3f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            text-align: center;
+        }
   
-  .today {
-    background-color: #a83f3f;
-  }
+            .month i {
+                font-size: 2.5rem;
+                cursor: pointer;
+            }
+            
+            .month h3 {
+                font-size: 3rem;
+                font-weight: 400;
+                letter-spacing: 0.2rem;
+                margin-top: 1rem;
+            }
   
-  .today:hover {
-    background-color: #ce5757;
-    cursor: pointer;
-  }
+        .dates {
+            justify-content: center;
+            align-items: center;
+            height: auto;
+        }
   
-  .otherMonth {
-    color: #666;
-  }
+            .weekdays {
+                width: 100%;
+                height: 2.2rem;
+                padding: 0.4rem;
+                padding-bottom: 0;
+                display: flex;
+                align-items: center;
+            }
+            
+                .weekdays div {
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                    letter-spacing: 0.1rem;
+                    width: calc(100% / 7 + 0.2rem);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            
+            .days {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0.4rem;
+            }
+            
+                .days div {
+                    font-size: 1.4rem;
+                    margin: -0.1rem;
+                    width: calc(100% / 7 + 0.2rem);
+                    height: 6rem;
+                    display: flex;
+                    justify-content: left;
+                    align-items: top;
+                    padding: 0.4rem;
+                    transition: background-color 0.15s;
+                    border: 0.2rem solid #777;
+                }
+                
+                .days div:hover {
+                    background-color: #61211f;
+                    cursor: pointer;
+                }
+                
+                .today {
+                    background-color: #a83f3f;
+                }
+                .selected {
+                    background-color: #531917;
+                }
+                
+                .cal-space.prev, .cal-space.next {
+                    color: #666;
+                }
+
+    .weather {
+        width: 100%;
+    }
+        .bodies {
+            padding: 0 0.25rem;
+            margin: 0.5rem;
+            width: 35%;
+            height: auto;
+            display: block;
+        }
+            .bodies h2 {                
+                font-size: 1.5rem;
+                font-weight: 600;
+                padding: 0 0.35rem;
+                margin: 0;
+            }
+            .bodies p {
+                float:left;
+                font-size: 1.25rem;
+                padding: 0 0.25rem;
+            }
+            .salos, .vol {
+                display: flex;
+                justify-content: space-between;
+            }
+            .ghea {
+                display: flex;
+            }
+                .ghea-text {
+                    display: flex;
+                    flex-direction: column;
+                    text-align: right;
+                }
+
+                .moon {
+                    position: relative;
+
+                    flex: 0 0 8rem;
+                    width: 8rem;
+                    height: 8rem;
+                    margin: 0.5rem 0;
+                }
+                
+                    #sal-disk {
+                        position: absolute; 
+                        top: 0; 
+                        left: 0; 
+
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+
+                        background: linear-gradient(90deg, #ffc 0%, #ffc 50%, #000 51%, #000 100%);
+                        transform: rotateZ(180deg);
+                    }
+                    
+                        #sal-mask {
+                            position: absolute; 
+                            top: 0; 
+                            left: 0; 
+
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                            
+                            transform: rotateY(0deg);
+                            background: #000;
+                        }
+                    
+                    #vol-disk {
+                        position: absolute; 
+                        top: 0; 
+                        left: 0; 
+                        
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+
+                        background: linear-gradient(90deg, #ccf 0%, #ccf 50%, #0000 51%, #0000 100%);
+                        opacity: 0.4;
+                        -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, #fff0 50%, #fff 50%);
+                        mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, #fff0 50%, #fff 50%);
+
+                        transform: rotateZ(180deg);
+                    }
+                    
+                        #vol-mask {
+                            position: absolute; 
+                            top: 0; 
+                            left: 0; 
+                            
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+
+                            opacity:0;
+                            transform: rotateY(0deg);
+                            background: #ccf;
+                        }
+
+
+

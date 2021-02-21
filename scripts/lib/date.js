@@ -9,13 +9,14 @@ class FantasyDate {
      * @param {} year Defaults to 0. Can be negative.
      * @param {*} month Defaults to 1. Ranges from 1-13.
      * @param {*} day Defaults to 1. Range depends on month.
+     * @param {*} force If true, ignore data validation.
      * @throws Exception when month/day is out of range.
      */
-    constructor(year=0, month=1, day=1) {
+    constructor(year=0, month=1, day=1, force=false) {
         this.year = year;
-        if (month > 13) throw 'Invalid month: ' + month;
+        if (month > 13 && !force) throw 'Invalid month: ' + month;
         this.month = month;
-        if (day > month_lengths[month-1]) throw 'Invalid day: ' + day;
+        if (day > month_lengths[month-1] && !force) throw 'Invalid day: ' + day;
         this.day = day;
     }
 
