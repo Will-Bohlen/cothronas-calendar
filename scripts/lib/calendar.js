@@ -27,7 +27,7 @@ class Calendar extends Application {
             template: "modules/cothronas-calendar/templates/calendar.html",
             popOut: true,
             width: 500,
-            height: 700
+            height: 750
         });
     }
 
@@ -48,10 +48,11 @@ class Calendar extends Application {
      */
     getData() {
         const templateData = {
-            dateString: this.viewDate.getMonth(),
+            monthString: this.viewDate.getMonth(),
             weekdays: weekdays,
             daysInMonth: this.getDays(this.viewDate.month),
-            riseSetTimes: this.calculateRiseSetTimes(this.weatherDate)
+            riseSetTimes: this.calculateRiseSetTimes(this.weatherDate),
+            selectedDate: this.weatherDate.toString()
         }
         return templateData;
     }
@@ -65,6 +66,8 @@ class Calendar extends Application {
         const prev_month = '#prev-month';
         const next_month = '#next-month';
         const cal_space = '.cal-space';
+        const date_input = '#date-input';
+        const input_prompt = "Enter date:";
 
         // Previous month button
         html.find(prev_month).click(ev => {
@@ -85,6 +88,26 @@ class Calendar extends Application {
             if (ev.target.outerHTML.search('next') != -1) this.weatherDate.forward(0, 1);
             this.render();
             this.updateMoon(this.weatherDate);
+        });
+
+        // When the date field is selected, replace the text with the prompt
+        html.find(date_input).focus(ev => {
+            ev.target.innerHTML = input_prompt;
+        });
+
+        // If the enter key is pressed in the date field, deselect it.
+        // Otherwise if the input prompt is still there when user starts typing, clear it.
+        html.find(date_input).keypress(ev => {
+            if (ev.key == "Enter") {
+                ev.target.blur();
+            }
+            else if (ev.target.innerHTML == input_prompt) ev.target.innerHTML = "";
+        });
+
+        // When the field is deselected, update the date.
+        html.find(date_input).blur(ev => {
+            this.parseDate(ev.target.innerHTML);
+            ev.target.innerHTML = this.weatherDate.toString();
         });
 
         // Update the moon phases after loading
@@ -199,8 +222,6 @@ class Calendar extends Application {
         volOutput.maskY = volPhase * 360;
         volOutput.diskZ = volPhase >= 0.5 ? 180 : 0;
         volOutput.ellipseWidth = volPhase >= 0.25 && volPhase <= 0.75 ? 0 : Math.sin((volPhase + 0.25) * Math.PI * 2) * 100;
-        console.log(`phase: ${volPhase}`);
-        console.log(volOutput);
 
         return volOutput;
     }
@@ -246,5 +267,81 @@ class Calendar extends Application {
         hours = hours > 12 || hours == 0 ? Math.abs(hours - 12) : hours;
 
         return `${hours}:${minuteString} ${suffix}`;
+    }
+
+    /**
+     * Converts a string date into a FantasyDate object and passes it to viewDate and weatherDate.
+     * @param {} text the string representation of the date.
+     */
+    parseDate(text) {
+        // Catches strings of digits and strings of letters
+        const reTerms = /[-\d]+|[^\W\d]+/g;
+
+        let outDate = { day: null, month: null, year: null };
+        let terms = text.match(reTerms);
+        let monthIndex = -1;
+
+        // Only iterate if we had at least one match
+        if (reTerms != null) {
+            // First loop checks for months written out in text
+            for (let i = 0; i < terms.length; i++) {
+                let term = terms[i];
+                let isMonth = false;
+                // Check for month names
+                for (const month of month_names) {
+                    // Remove accents from letters
+                    let normMonth = month.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if (term.toLowerCase() == normMonth.toLowerCase()) {
+                        monthIndex = i;
+                        isMonth = true;
+                        outDate.month = month_names.indexOf(month) + 1;
+                    }
+                }
+                // If the text isn't a month, remove it from the array
+                if (!isMonth && isNaN(term)) {
+                    terms.splice(i, 1);
+                    i -= 1;
+                }
+            }
+            // If there are more than three terms, reject the string
+            if (terms.length <= 3) {
+                // Second loop assigns numbers to day/month/year
+                for (let i = 0; i < terms.length; i++) {
+                    let term = terms[i];
+                    // Ignore the text month
+                    if (i != monthIndex) {
+                        // Set day if it is either before the month string, or the first term of several
+                        if ((i < monthIndex) ||
+                            (i == 0 && terms.length > 1)) outDate.day = term;
+                        // Set month if there is no text month, and it is the second term
+                        else if (monthIndex == -1 && i == 1) {
+                            outDate.month = term;
+                            monthIndex = i;
+                        }
+                        // Set year if it is immediately after the month
+                        else if (i == monthIndex + 1) outDate.year = term;
+                    }
+                }
+            }
+        }
+
+        // Default unset values to current values
+        if (outDate.day == null) outDate.day = this.weatherDate.day;
+        if (outDate.month == null) outDate.month = this.weatherDate.month;
+        if (outDate.year == null) outDate.year = this.weatherDate.year;
+
+        // Validate that the date is valid, and if so update weatherDate and viewDate
+        try {
+            let newDate = new FantasyDate(outDate.year, outDate.month, outDate.day);
+            this.weatherDate = newDate.clone();
+            this.viewDate.month = newDate.month;
+            this.viewDate.year = newDate.year;
+        } catch (error) {
+            // invalid date, nothing happens
+        }
+        finally {
+            // Rerender the calendar
+            this.render();
+        }
     }
 }

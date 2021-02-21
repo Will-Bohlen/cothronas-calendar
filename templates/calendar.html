@@ -5,7 +5,7 @@
         <div class="month">
             <i id="prev-month" class="fas fa-angle-left prev"></i>
             <div class="date">
-                <h3>{{dateString}}</h3>
+                <h3>{{monthString}}</h3>
             </div>
             <i id="next-month" class="fas fa-angle-right next"></i>
         </div>
@@ -17,7 +17,7 @@
                 {{/each}}
             </div>
 
-            <div id="days" class="days">
+            <div class="days">
                 {{#each daysInMonth}}
                     {{{this}}}
                 {{/each}}
@@ -25,6 +25,9 @@
         </div>
     </div>
     <div class="weather">
+        <div id="weather-header"aria-placeholder="test">
+            <h2 id="date-input" contenteditable="true">{{selectedDate}}</h2>
+        </div>
         <div class="bodies">
             <h2>Salos</h2>
             <div class="salos">

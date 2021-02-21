@@ -14,9 +14,9 @@ class FantasyDate {
      */
     constructor(year=0, month=1, day=1, force=false) {
         this.year = year;
-        if (month > 13 && !force) throw 'Invalid month: ' + month;
+        if ((month > 13 || month < 0) && !force) throw 'Invalid month: ' + month;
         this.month = month;
-        if (day > month_lengths[month-1] && !force) throw 'Invalid day: ' + day;
+        if ((day > month_lengths[month-1] || day < 0) && !force) throw 'Invalid day: ' + day;
         this.day = day;
     }
 
@@ -75,8 +75,7 @@ class FantasyDate {
      * @returns a string representation of the current month/year.
      */
     getMonth() {
-        return month_names[this.month - 1] + 
-            ", " + this.year + " YD";
+        return `(${this.month}) ${month_names[this.month - 1]} ${this.year}`;
     }
 
     /**
