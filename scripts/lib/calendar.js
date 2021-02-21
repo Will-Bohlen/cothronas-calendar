@@ -176,7 +176,7 @@ class Calendar extends Application {
 
         let salosOutput = {maskColor: '#000', maskY: 0, diskZ: 180};
 
-        salosOutput.maskColor = salosPhase >= 0.25 && salosPhase < 0.75 ? '#ffc' : '#000';
+        salosOutput.maskColor = salosPhase >= 0.25 && salosPhase <= 0.75 ? '#ffc' : '#000';
         salosOutput.maskY = salosPhase * 360;
         salosOutput.diskZ = salosPhase >= 0.5 ? 180 : 0;
         return salosOutput;
@@ -195,10 +195,12 @@ class Calendar extends Application {
 
         let volOutput = {maskOpacity: 0, maskY:0, diskZ: 180, ellipseWidth: 100};
 
-        volOutput.maskOpacity = volPhase >= 0.25 && volPhase < 0.75 ? 1 : 0;
+        volOutput.maskOpacity = volPhase >= 0.25 && volPhase <= 0.75 ? 1 : 0;
         volOutput.maskY = volPhase * 360;
         volOutput.diskZ = volPhase >= 0.5 ? 180 : 0;
-        volOutput.ellipseWidth = volPhase >= 0.25 && volPhase < 0.75 ? 0 : Math.sin(volPhase * Math.PI * 2 + 1.5) * 100;
+        volOutput.ellipseWidth = volPhase >= 0.25 && volPhase <= 0.75 ? 0 : Math.sin((volPhase + 0.25) * Math.PI * 2) * 100;
+        console.log(`phase: ${volPhase}`);
+        console.log(volOutput);
 
         return volOutput;
     }
