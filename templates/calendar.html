@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="modules/cothronas-calendar/styles/calendar.css" />
+
+<div class="cothronas-calendar-container">
+    <div class="calendar">
+        <div class="month">
+            <i id="prev-month" class="fas fa-angle-left prev"></i>
+            <div class="date">
+                <h3>{{dateString}}</h3>
+            </div>
+            <i id="next-month" class="fas fa-angle-right next"></i>
+        </div>
+
+        <div class="dates">
+            <div class="weekdays">
+                {{#each weekdays}}
+                    <div>{{this}}</div>
+                {{/each}}
+            </div>
+
+            <div class="days">
+                {{#each daysInMonth}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
