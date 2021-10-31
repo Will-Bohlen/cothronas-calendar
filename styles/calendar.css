@@ -103,7 +103,10 @@
                 .selected {
                     background-color: #531917;
                 }
-                
+                .hasNotes {
+                    background-color: #524949;
+                }
+
                 .cal-space.prev, .cal-space.next {
                     color: #666;
                 }
@@ -124,6 +127,7 @@
             width: 35%;
             height: auto;
             display: block;
+            float: left;
         }
             .bodies h2 {                
                 font-size: 1.5rem;
@@ -214,6 +218,25 @@
                             transform: rotateY(0deg);
                             background: #ccf;
                         }
+        .notes {
+            float: right;
+            width: 60%;
+            padding: 0 0.25rem;
+            margin: 0.5rem;
+        }
+            .notes h2 {                
+                font-size: 1.5rem;
+                font-weight: 600;
+                padding: 0 0.35rem;
+                margin: 0;
+            }
+            #notebox {
+                padding: 0 0.25rem;
+                margin: 0.5rem;
+                width: 98%;
+                height: 10em;
+                display: block;
+            }
 
 
 

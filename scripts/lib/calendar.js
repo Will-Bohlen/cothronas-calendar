@@ -14,6 +14,8 @@ class Calendar extends Application {
         this.currentDate = new FantasyDate(1318, 1, 1);
         this.weatherDate = this.currentDate.clone();
         this.viewDate = new FantasyDate(this.currentDate.year, this.currentDate.month);
+        this.jsonDirectory = "/worlds/" + game.data.world.name + "/data";
+        this.readJSON();
     }
 
     /**
@@ -38,7 +40,6 @@ class Calendar extends Application {
      * @override based on the Application method from Foundry API
      */
     render(force, options) {
-        console.log("hot diggity we makin a calendar");
         super.render(force, options);
     }
 
@@ -47,14 +48,46 @@ class Calendar extends Application {
      * @override based on the Application method from Foundry API
      */
     getData() {
+        this.currentNotes = this.notes;
         const templateData = {
             monthString: this.viewDate.getMonth(),
             weekdays: weekdays,
             daysInMonth: this.getDays(this.viewDate.month),
             riseSetTimes: this.calculateRiseSetTimes(this.weatherDate),
-            selectedDate: this.weatherDate.toString()
+            selectedDate: this.weatherDate.toString(),
+            notes: this.notes
         }
         return templateData;
+    }
+
+    readJSON() {
+        fetch(this.jsonDirectory + "/calendardata.json").then(data => {
+            if (data.status == 404) {
+                data = JSON.parse('{\"dates\":{}}');
+                this.writeJSON(data);
+                return data;
+            } 
+            return data.json();
+        })
+        .then(json => {
+            this.userdata = json;
+            if (json["dates"][this.weatherDate]) {
+                if (json["dates"][this.weatherDate]["notes"]) {
+                    this.notes = new Handlebars.SafeString(json["dates"][this.weatherDate]["notes"]);
+                }
+            }
+            else {
+                this.notes = "";
+            }
+
+            if (Handlebars.Utils.escapeExpression(this.currentNotes) != Handlebars.Utils.escapeExpression(this.notes))
+                this.render();
+        });
+    }
+
+    writeJSON(data) {
+        const file = new File([JSON.stringify(data, null, 4)], "calendardata.json", {type: 'application/json'});
+        FilePicker.upload("data", this.jsonDirectory, file)
     }
 
     /**
@@ -68,6 +101,7 @@ class Calendar extends Application {
         const cal_space = '.cal-space';
         const date_input = '#date-input';
         const input_prompt = "Enter date:";
+        const notebox = "#notebox";
 
         // Previous month button
         html.find(prev_month).click(ev => {
@@ -110,8 +144,23 @@ class Calendar extends Application {
             ev.target.innerHTML = this.weatherDate.toString();
         });
 
+        html.find(notebox).blur(ev => {
+            if (this.userdata) {
+                let stripped = ev.target.innerHTML.replace(/\s|(<\/?div>)|(<br>)/g, "")
+                console.log(stripped);
+                if (stripped != "") {
+                    if (!this.userdata["dates"][this.weatherDate])
+                        this.userdata["dates"][this.weatherDate] = {}; 
+                    this.userdata["dates"][this.weatherDate]["notes"] = ev.target.innerHTML;
+                }
+                else delete this.userdata["dates"][this.weatherDate];
+                this.writeJSON(this.userdata);
+            }
+        });
+
         // Update the moon phases after loading
         this.updateMoon(this.weatherDate);
+        this.readJSON();
     }
 
     /**
@@ -142,6 +191,12 @@ class Calendar extends Application {
                 outList.push(`<div class="cal-space selected">${i}</div>`);
             else if (this.currentDate.equals(new FantasyDate(this.viewDate.year, this.viewDate.month, i))) 
                 outList.push(`<div class="cal-space today">${i}</div>`);
+            else if (this.userdata) {
+                if (this.userdata["dates"].hasOwnProperty((new FantasyDate(this.viewDate.year, this.viewDate.month, i)).toString())) {
+                    outList.push(`<div class="cal-space hasNotes">${i}</div>`);
+                }
+                else outList.push(`<div class=cal-space>${i}</div>`);
+            }
             else outList.push(`<div class=cal-space>${i}</div>`);
         }
 
